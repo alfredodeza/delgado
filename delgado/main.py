@@ -21,6 +21,8 @@ Version: %s
 
     """ % delgado.__version__
 
+    mapper = {'run': Server}
+
     def __init__(self, argv=None, parse=True):
         if argv is None:
             argv = sys.argv
@@ -39,14 +41,16 @@ Version: %s
         options = [['--log', '--logging']]
         self.config = {}
 
-        parser = Transport(argv, options=options)
+        parser = Transport(argv, mapper=self.mapper,
+                           options=options, check_help=False,
+                           check_version=False)
         parser.catch_help = self._help
         parser.catch_version = delgado.__version__
         parser.parse_args()
         delgado.config = {'verbosity': parser.get('--log', 'debug')}
-        parser.mapper = {'run': Server}
 
         if len(argv) <= 1:
             return parser.print_help()
-
         parser.dispatch()
+        parser.catches_help()
+        parser.catches_version()
