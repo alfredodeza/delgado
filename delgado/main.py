@@ -11,7 +11,11 @@ delgado: A utility to run in the foreground and listen for commands
 to execute frmo the network to the terminal
 descriptive tests.
 
-run         Run the server, listening on a unix socket.
+Global Options:
+--log, --logging    Set the level of logging. Acceptable values:
+                    debug, warning, error, critical
+
+run                 Run the server, listening on a unix socket.
 
 Version: %s
 
@@ -32,13 +36,14 @@ Version: %s
 
     @catches(KeyboardInterrupt)
     def main(self, argv):
-        options = []
+        options = [['--log', '--logging']]
         self.config = {}
 
         parser = Transport(argv, options=options)
         parser.catch_help = self._help
         parser.catch_version = delgado.__version__
         parser.parse_args()
+        delgado.config = {'verbosity': parser.get('--log', 'debug')}
         parser.mapper = {'run': Server}
 
         if len(argv) <= 1:
