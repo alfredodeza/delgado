@@ -3,7 +3,7 @@ from delgado.util import red_arrow
 from functools import wraps
 
 
-def catches(catch=None, handler=None):
+def catches(catch=None, handler=None, exit=True):
     """
     Very simple decorator that tries any of the exception(s) passed in as
     a single exception class or tuple (containing multiple ones) returning the
@@ -48,7 +48,8 @@ def catches(catch=None, handler=None):
                     return handler(e)
                 else:
                     sys.stderr.write(make_exception_message(e))
-                    sys.exit(1)
+                    if exit:
+                        sys.exit(1)
         return newfunc
 
     return decorate
