@@ -1,5 +1,6 @@
 from pytest import raises
 from delgado import loader
+from delgado.exceptions import InvalidFormat
 
 
 class TestFormatCommand(object):
@@ -14,14 +15,12 @@ class TestFormatCommand(object):
         result = loader.format_command(obj)
         assert result == ['executable']
 
-    def test_raise_invalid_format(self, capsys):
-        with raises(SystemExit):
+    def test_raise_invalid_format(self):
+        with raises(InvalidFormat):
             loader.format_command([])
-        out, err = capsys.readouterr()
-        assert 'InvalidFormat' in err
 
-    def test_get_correct_rpr(self, capsys):
-        with raises(SystemExit):
+    def test_get_correct_rpr(self):
+        with raises(InvalidFormat) as exc:
             loader.format_command([])
-        out, err = capsys.readouterr()
-        assert 'received: []' in err
+        error = exc.value.args[0]
+        assert 'received: []' in error
