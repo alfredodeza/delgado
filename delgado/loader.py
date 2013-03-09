@@ -3,22 +3,26 @@ JSON Loading utilities
 """
 from json import loads
 import delgado
-from delgado.decorators import catches
 from delgado.exceptions import Forbidden, InvalidFormat
 
 
-@catches((ValueError, Forbidden))
 def loader(string, allowed=None):
     allowed = allowed or delgado.config.get('allowed', [])
-    obj = loads(string)
+    try:
+        obj = loads(string)
+        return format_command(obj)
+    except ValueError:
+        msg = 'unable to parse unexpected input: %s' % repr(string)
+        raise InvalidFormat(msg)
     for exe in obj.keys():
         if exe not in allowed:
             raise Forbidden('Executable %s, is not allowed' % exe)
 
 
-@catches(InvalidFormat)
 def format_command(obj):
     try:
+        if not obj:
+            raise AttributeError
         executable = obj.keys()[0]
         arguments = obj[executable]
         return [executable] + arguments
