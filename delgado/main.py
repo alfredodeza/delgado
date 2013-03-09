@@ -2,6 +2,7 @@ import sys
 from tambo import Transport
 import delgado
 from delgado.server import Server
+from delgado.decorators import catches
 
 
 class Delgado(object):
@@ -29,19 +30,18 @@ Version: %s
             sys.stderr.write(msg + '\n')
         sys.exit(1)
 
+    @catches(KeyboardInterrupt)
     def main(self, argv):
         options = []
         self.config = {}
 
         parser = Transport(argv, options=options)
         parser.catch_help = self._help
+        parser.catch_version = delgado.__version__
         parser.parse_args()
         parser.mapper = {'run': Server}
 
-        if not parser.items():
+        if len(argv) <= 1:
             return parser.print_help()
 
-        try:
-            parser.dispatch()
-        except KeyboardInterrupt:
-            self.msg("Exiting from delgado.")
+        parser.dispatch()
