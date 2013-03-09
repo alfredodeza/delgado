@@ -1,0 +1,5 @@
+pytest
+tox
+detox
+flake8
+tambo
