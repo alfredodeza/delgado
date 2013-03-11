@@ -24,3 +24,13 @@ class TestFormatCommand(object):
             loader.format_command([])
         error = exc.value.args[0]
         assert 'received: []' in error
+
+
+class TestLoader(object):
+
+    def test_loader_simplest_obj(self):
+        result = loader.loader("""{"foo": []}""", allowed=['foo'])
+        assert result == ['foo']
+
+    def test_loader_not_allowed(self):
+        pass
