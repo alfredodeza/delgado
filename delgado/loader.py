@@ -10,13 +10,14 @@ def loader(string, allowed=None):
     allowed = allowed or delgado.config.get('allowed', [])
     try:
         obj = loads(string)
+        for exe in obj.keys():
+            if exe not in allowed:
+                raise Forbidden('Executable %s, is not allowed' % exe)
+
         return format_command(obj)
     except ValueError:
         msg = 'unable to parse unexpected input: %s' % repr(string)
         raise InvalidFormat(msg)
-    for exe in obj.keys():
-        if exe not in allowed:
-            raise Forbidden('Executable %s, is not allowed' % exe)
 
 
 def format_command(obj):
