@@ -13,6 +13,11 @@ setup(
     author = 'Alfredo Deza',
     author_email = 'alfredodeza [at] gmail.com',
     scripts = ['bin/delgado'],
+    entry_points = dict(
+        delgado_handlers = [
+            'pytest = delgado.services:Pytest',
+        ],
+    ),
     install_requires = ['tambo'],
     version = metadata['version'],
     url = 'http://github.com/alfredodeza/delgado',
