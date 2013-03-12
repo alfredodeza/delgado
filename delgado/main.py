@@ -65,9 +65,9 @@ Plugins:
         parser.mapper = self.mapper
         if len(argv) <= 1:
             return parser.print_help()
+        parser.dispatch()
         parser.catches_help()
         parser.catches_version()
-        parser.dispatch()
 
 
 def _load_library_extensions():
