@@ -25,6 +25,17 @@ Run the server that listens on a unix socket.
         parser.catch_help = self._help
         parser.parse_args()
         delgado.config['allowed'] = parser.get('--allowed', [])
+        engine = Engine()
+        engine.run_forever()
+
+
+class Engine(object):
+
+    def __init__(self, socket_location=None, connection=None):
+        self.socket_location = socket_location or '/tmp/delgado.sock'
+        self.connection = connection or self.make_connection()
+
+    def run_forever(self):
         while True:
             try:
                 logger.debug('creating a new connection')
@@ -32,13 +43,13 @@ Run the server that listens on a unix socket.
             except Reconnect:
                 pass
 
-    def connection(self):
+    def make_connection(self):
         s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         try:
-            os.remove("/tmp/socketname")
+            os.remove(self.socket_location)
         except OSError:
             pass
-        s.bind("/tmp/socketname")
+        s.bind(self.socket_location)
         s.listen(1)
         conn, addr = s.accept()
         logger.debug('connection ready and listenting')
