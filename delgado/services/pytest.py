@@ -20,7 +20,7 @@ Run a base socket listener that allows py.test commands.
         parser = Transport(self.argv, options=['--socket-location'])
         parser.catch_help = self._help
         parser.parse_args()
-        location = parser.get('--socket-location', '/tmp/pytest.sock')
+        location = parser.get('--socket-location') or '/tmp/pytest.sock'
         delgado.config['allowed'] = ['py.test']
         engine = Engine(socket_location=location)
         engine.run_forever()
