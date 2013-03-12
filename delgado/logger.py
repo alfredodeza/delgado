@@ -95,7 +95,3 @@ def warning(message):
 
 def critical(message):
     return LogMessage('critical', message).write()
-
-
-def remote(message):
-    return LogMessage('remote', message).write()
