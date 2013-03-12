@@ -1,6 +1,6 @@
 from pytest import raises
 from delgado import loader
-from delgado.exceptions import InvalidFormat
+from delgado.exceptions import InvalidFormat, Forbidden
 
 
 class TestFormatCommand(object):
@@ -33,4 +33,9 @@ class TestLoader(object):
         assert result == ['foo']
 
     def test_loader_not_allowed(self):
-        pass
+        with raises(Forbidden):
+            loader.loader("""{"foo": []}""")
+
+    def test_unable_to_parse(self):
+        with raises(InvalidFormat):
+            loader.loader("""foo": []}""", allowed=['foo'])
