@@ -25,6 +25,10 @@ class TestFormatCommand(object):
         error = exc.value.args[0]
         assert 'received: []' in error
 
+    def test_no_obj(self):
+        with raises(InvalidFormat):
+            loader.format_command({})
+
 
 class TestLoader(object):
 
