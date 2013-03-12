@@ -33,7 +33,10 @@ class Engine(object):
 
     def __init__(self, socket_location=None, connection=None):
         self.socket_location = socket_location or '/tmp/delgado.sock'
-        self.connection = connection or self.make_connection()
+        if connection:
+            self.connection = connection  # should be a callable
+        else:
+            self.connection = self.make_connection
 
     def run_forever(self):
         while True:
