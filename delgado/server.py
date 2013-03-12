@@ -16,16 +16,17 @@ Run the server that listens on a unix socket.
 --allowed           The executable allowed to run for this listener
     """
 
-    def __init__(self, argv):
+    def __init__(self, argv, connection=None):
         self.argv = argv
+        self.connection = connection
 
     def parse_args(self):
         options = ['--allowed']
         parser = Transport(self.argv, options=options)
         parser.catch_help = self._help
         parser.parse_args()
-        delgado.config['allowed'] = parser.get('--allowed', [])
-        engine = Engine()
+        delgado.config['allowed'] = parser.get('--allowed') or []
+        engine = Engine(connection=self.connection)
         engine.run_forever()
 
 
