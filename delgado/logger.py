@@ -50,8 +50,8 @@ class LogMessage(object):
     @property
     def base_string(self):
         if self.config_level < 2:
-            return "==> [%s]" % self.level_name
-        return "==>"
+            return "--> [%s]" % self.level_name
+        return "-->"
 
     @property
     def level_int(self):
