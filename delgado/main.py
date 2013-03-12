@@ -17,19 +17,18 @@ def _load_library_extensions():
 
         entry_points = {
             'delgado_handlers': [
-                'plugin_name = mylib.mymodule:initialize_func',
+                'plugin_name = mylib.mymodule:Handler_Class',
             ],
         },
 
-    `plugin_name` can be anything, and is only used to display the name
-    of the plugin at initialization time.
+    `plugin_name` will be used to load it as a sub command.
     """
     group = 'delgado_handlers'
     entry_points = pkg_resources.iter_entry_points(group=group)
     plugins = []
     for ep in entry_points:
         try:
-            logger.debug('Loading %s' % ep.name)
+            logger.debug('loading %s' % ep.name)
             plugin = ep.load()
             plugin._delgado_name_ = ep.name
             plugins.append(plugin)
@@ -61,7 +60,6 @@ Plugins:
 
     def __init__(self, argv=None, parse=True):
         self.plugin_help = "No plugins found/loaded"
-        self.enable_plugins()
         if argv is None:
             argv = sys.argv
         if parse:
@@ -69,13 +67,6 @@ Plugins:
 
     def help(self):
         return self._help % (delgado.__version__, self.plugin_help)
-
-    def msg(self, msg, stdout=True):
-        if stdout:
-            sys.stdout.write(msg + '\n')
-        else:
-            sys.stderr.write(msg + '\n')
-        sys.exit(1)
 
     def enable_plugins(self):
         """
@@ -92,17 +83,17 @@ Plugins:
     @catches(KeyboardInterrupt)
     def main(self, argv):
         options = [['--log', '--logging']]
-        self.config = {}
-
         parser = Transport(argv, mapper=self.mapper,
                            options=options, check_help=False,
                            check_version=False)
+        parser.parse_args()
+        delgado.config['verbosity'] = parser.get('--log', 'info')
+        self.enable_plugins()
         parser.catch_help = self.help()
         parser.catch_version = delgado.__version__
-        parser.parse_args()
-        delgado.config = {'verbosity': parser.get('--log', 'debug')}
+        parser.mapper = self.mapper
         if len(argv) <= 1:
             return parser.print_help()
-        parser.dispatch()
         parser.catches_help()
         parser.catches_version()
+        parser.dispatch()
