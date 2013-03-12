@@ -8,35 +8,6 @@ from delgado.server import Server
 from delgado.decorators import catches
 
 
-def _load_library_extensions():
-    """
-    Locate all setuptools entry points by the name 'delgado_handlers'
-    and initialize them.
-    Any third-party library may register an entry point by adding the
-    following to their setup.py::
-
-        entry_points = {
-            'delgado_handlers': [
-                'plugin_name = mylib.mymodule:Handler_Class',
-            ],
-        },
-
-    `plugin_name` will be used to load it as a sub command.
-    """
-    group = 'delgado_handlers'
-    entry_points = pkg_resources.iter_entry_points(group=group)
-    plugins = []
-    for ep in entry_points:
-        try:
-            logger.debug('loading %s' % ep.name)
-            plugin = ep.load()
-            plugin._delgado_name_ = ep.name
-            plugins.append(plugin)
-        except Exception as error:
-            logger.error("Error initializing plugin %s: %s" % (ep, error))
-    return plugins
-
-
 class Delgado(object):
     _help = """
 delgado: A utility to run in the foreground and listen for commands
@@ -97,3 +68,35 @@ Plugins:
         parser.catches_help()
         parser.catches_version()
         parser.dispatch()
+
+
+def _load_library_extensions():
+    """
+    Locate all setuptools entry points by the name 'delgado_handlers'
+    and initialize them.
+    Any third-party library may register an entry point by adding the
+    following to their setup.py::
+
+        entry_points = {
+            'delgado_handlers': [
+                'plugin_name = mylib.mymodule:Handler_Class',
+            ],
+        },
+
+    `plugin_name` will be used to load it as a sub command.
+    """
+    group = 'delgado_handlers'
+    entry_points = pkg_resources.iter_entry_points(group=group)
+    plugins = []
+    for ep in entry_points:
+        try:
+            logger.debug('loading %s' % ep.name)
+            plugin = ep.load()
+            plugin._delgado_name_ = ep.name
+            plugins.append(plugin)
+        except Exception as error:
+            logger.error("Error initializing plugin %s: %s" % (ep, error))
+    return plugins
+
+
+
