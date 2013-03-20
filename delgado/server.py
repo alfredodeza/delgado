@@ -69,7 +69,7 @@ class Engine(object):
             logger.info("Running command: %s" % data)
             call(data)
         except (InvalidFormat, Forbidden) as error:
-            logger.error(error.message)
+            logger.error(str(error))
             raise Reconnect
         finally:
             conn.close()
