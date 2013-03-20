@@ -43,7 +43,7 @@ def catches(catch=None, handler=None, exit=True):
         def newfunc(*a, **kw):
             try:
                 return f(*a, **kw)
-            except catch, e:
+            except catch as e:
                 if handler:
                     return handler(e)
                 else:
