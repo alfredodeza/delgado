@@ -17,7 +17,7 @@ _level_names = {
     DEBUG    : 'debug'
 }
 
-_reverse_level_names = dict((v, k) for (k, v) in _level_names.iteritems())
+_reverse_level_names = dict((v, k) for (k, v) in _level_names.items())
 
 _level_colors = {
     'remote'   : 'bold',
