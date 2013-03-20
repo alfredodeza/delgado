@@ -24,7 +24,7 @@ def format_command(obj):
     try:
         if not obj:
             raise AttributeError
-        executable = obj.keys()[0]
+        executable = list(obj)[0]
         arguments = obj[executable]
         return [executable] + arguments
     except AttributeError:
