@@ -26,3 +26,48 @@ this::
     $ delgado run --allowed ls
     --> Running command: [u'ls']
 
+.. note::
+    If you are planning on using ``netcat`` make sure it is the BSD version
+    that has support for UDS (using the ``-U`` flag). The GNU version will not
+    work. You can use *any* tool that can communicate over UDS.
+
+
+plugins
+-------
+``delgado`` was built with some modularity in mind, by default you get the
+``py.test`` plugin which will run the server and listen for ``py.test`` commands
+only.
+
+The plugins use ``setuptools`` entry points. If you want a new plugin to be
+available, this is what it should have on its ``setup.py`` file::
+
+    setup(
+        ...
+        entry_points = dict(
+            delgado_handlers = [
+                'my_command = my_package.my_module:MyClass',
+            ],
+        ),
+
+The ``MyClass`` should be a class that accepts ``sys.argv`` as its argument,
+``delgado`` will pass that in at instantiation and call a ``parse_args``
+method.
+
+This is how the ``py.test`` plugin looks like for example::
+
+
+    class Pytest(object):
+
+        help_menu = 'A handler for running py.test commands'
+        _help = """
+    Run a base socket listener that allows py.test commands.
+
+    --socket-location   The location for the socket (defaults
+                        to /tmp/pytest.sock)
+        """
+
+        def __init__(self, argv):
+            self.argv = argv
+
+        def parse_args(self):
+            ...
