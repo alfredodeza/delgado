@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'delgado',
-    description = 'Command executor',
+    description = 'Command executor over UDS',
     packages = find_packages(),
     author = 'Alfredo Deza',
     author_email = 'alfredodeza [at] gmail.com',
