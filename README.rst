@@ -46,13 +46,17 @@ plugin::
     --> [debug] creating a new connection
 
 
-Included Plugins
-----------------
+
+Plugins
+-------
+
+``pytest``
+----------
 ``delgado`` was originally conceived to give support to ``pytest.vim`` so it
 includes the ``pytest`` plugin that when called, it will listen for ``py.test``
 commands only and execute them.
 
-To listed for ``py.test`` commands, you would call the command like this::
+To listen for ``py.test`` commands, you would call the command like this::
 
     $ delgado pytest
 
