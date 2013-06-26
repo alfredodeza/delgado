@@ -32,8 +32,33 @@ this::
     work. You can use *any* tool that can communicate over UDS.
 
 
-plugins
--------
+Increasing Verbosity
+--------------------
+The command line tool uses a flag to control how much output it shows. By
+default the level is ``INFO`` (just like normal logging in applications) and
+can be raised all the way up to ``DEBUG``
+
+This is how a debug level call would look like for running the ``pytest``
+plugin::
+
+    $ delgado --log debug pytest
+    --> [debug] loading pytest
+    --> [debug] creating a new connection
+
+
+Included Plugins
+----------------
+``delgado`` was originally conceived to give support to ``pytest.vim`` so it
+includes the ``pytest`` plugin that when called, it will listen for ``py.test``
+commands only and execute them.
+
+To listed for ``py.test`` commands, you would call the command like this::
+
+    $ delgado pytest
+
+
+Adding plugins
+--------------
 ``delgado`` was built with some modularity in mind, by default you get the
 ``py.test`` plugin which will run the server and listen for ``py.test`` commands
 only.
