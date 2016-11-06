@@ -22,7 +22,7 @@ class TestServer(object):
 
     def test_not_allowed(self, capsys):
         self.set_debug_level()
-        self.conn.recv = Mock(side_effect=["""{"ls": []}""", TypeError])
+        self.conn.recv = Mock(side_effect=[b"""{"ls": []}""", TypeError])
         srv = server.Server([], connection=self.conn)
         with raises(TypeError):
             srv.parse_args()
