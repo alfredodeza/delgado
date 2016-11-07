@@ -62,10 +62,11 @@ class Engine(object):
     def run(self):
         conn = self.connection()
         raw_data = conn.recv(1024)
+        decoded_data = raw_data.decode('utf-8')
         try:
             if not raw_data:
                 raise Reconnect
-            data = loader(raw_data)
+            data = loader(decoded_data)
             logger.info("Running command: %s" % data)
             call(data)
         except (InvalidFormat, Forbidden) as error:
